@@ -16,6 +16,7 @@ export interface ICard {
   description?: string;
 }
 
+//общее
 export class Card<T> extends Component<ICard> {
   protected _title: HTMLElement;
   protected _price: HTMLElement;
@@ -71,6 +72,7 @@ export class Card<T> extends Component<ICard> {
 
 }
 
+//представление в списке (катологе)
 export class CatalogCard extends Card<HTMLElement> {
   constructor(protected blockName: string, container: HTMLElement, actions?: ICardActions) {
     super(blockName, container);
@@ -80,6 +82,7 @@ export class CatalogCard extends Card<HTMLElement> {
   }
 }
 
+//представление в модалке превью
 export class PreviewCard extends Card<HTMLElement> {
   protected _button: HTMLButtonElement;
 
@@ -92,6 +95,7 @@ export class PreviewCard extends Card<HTMLElement> {
   }
 }
 
+//представление в корзиме
 export class BasketCard extends Card<HTMLElement> {
   protected _buttonDelete: HTMLButtonElement;
   protected _index: HTMLElement;

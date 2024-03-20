@@ -104,7 +104,7 @@ export class AppState extends Model<IAppState> {
   }
 
   validateOrder(step: number) {
-    //проверить поля заказа
+    //проверить поля заказа (нужна ли проверка выбора типа оплаты???)
       const errors: typeof this.formErrors = {};
 
       if (step === 1) {
@@ -127,3 +127,4 @@ export class AppState extends Model<IAppState> {
       return Object.keys(errors).length === 0;
   }
 }
+

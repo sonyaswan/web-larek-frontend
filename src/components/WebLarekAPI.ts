@@ -2,7 +2,7 @@ import { Api, ApiListResponse } from './base/api';
 import {IProductItem, IOrder, IOrderResult} from "../types";
 
 
-export class AuctionAPI extends Api {
+export class WebLarekAPI extends Api {
   readonly cdn: string;
 
   constructor(cdn: string, baseUrl: string, options?: RequestInit) {

@@ -13,12 +13,17 @@ export interface IProductItem {
 
 export type paymentType = 'online' | 'on delivery';
 
-export interface IOrderForm {
+export interface IOrderAdress {
   payment: paymentType;
-  email: string;
-  phone: string;
   address: string
 };
+
+export interface IOrderContact {
+  email: string;
+  phone: string
+};
+
+export type IOrderForm = IOrderAdress & IOrderContact;
 
 export interface IOrder extends IOrderForm {
   items: productId[];
