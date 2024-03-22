@@ -72,7 +72,7 @@ export class Card<T> extends Component<ICard> {
 
 }
 
-//представление в списке (катологе)
+//представление в списке (каталоге)
 export class CatalogCard extends Card<HTMLElement> {
   constructor(protected blockName: string, container: HTMLElement, actions?: ICardActions) {
     super(blockName, container);
@@ -95,7 +95,7 @@ export class PreviewCard extends Card<HTMLElement> {
   }
 }
 
-//представление в корзиме
+//представление в корзине
 export class BasketCard extends Card<HTMLElement> {
   protected _buttonDelete: HTMLButtonElement;
   protected _index: HTMLElement;

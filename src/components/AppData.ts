@@ -2,7 +2,7 @@ import {Model} from "./base/Model";
 import {productId, ProductStatus, IProductItem, paymentType, IOrder, IAppState, IOrderForm, FormErrors} from "../types";
 
 
-export class productModel extends Model<IProductItem> {
+export class ProductModel extends Model<IProductItem> {
   id: productId;
   description: string;
   image: string;
@@ -13,7 +13,7 @@ export class productModel extends Model<IProductItem> {
 
 export class AppState extends Model<IAppState> {
   basket: Set<productId> = new Set();
-  catalog: productModel[];
+  catalog: ProductModel[];
   loading: boolean;
   order: IOrder = {
     payment: 'online',
@@ -59,9 +59,9 @@ export class AppState extends Model<IAppState> {
     return this.basket.size;
   }
 
-  getProductsFromBasket(): productModel[] {
+  getProductsFromBasket(): ProductModel[] {
     //возвращает список продуктов из корзины с описанием
-    let selectedProducts: productModel[] = [];
+    let selectedProducts: ProductModel[] = [];
     this.basket.forEach(item => {
       selectedProducts.push(this.catalog.find(product => product.id === item))
     })
@@ -81,11 +81,11 @@ export class AppState extends Model<IAppState> {
 
   setCatalog(items: IProductItem[]) {
     //заполнить данные каталога
-      this.catalog = items.map(item => new productModel(item, this.events));
+      this.catalog = items.map(item => new ProductModel(item, this.events));
       this.emitChanges('items:changed', { catalog: this.catalog });
   }
 
-  setPreview(item: productModel) {
+  setPreview(item: ProductModel) {
     //заполнить данные превью
       this.preview = item.id;
       this.emitChanges('preview:changed', item);
