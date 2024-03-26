@@ -1,6 +1,9 @@
 import {Model} from "./base/Model";
-import {productId, ProductStatus, IProductItem, paymentType, IOrder, IAppState, IOrderForm, FormErrors} from "../types";
+import {productId, ProductStatus, IProductItem, IOrder, IAppState, IOrderForm, FormErrors} from "../types";
 
+export type CatalogChangeEvent = {
+  catalog: ProductModel[]
+};
 
 export class ProductModel extends Model<IProductItem> {
   id: productId;
@@ -16,7 +19,7 @@ export class AppState extends Model<IAppState> {
   catalog: ProductModel[];
   loading: boolean;
   order: IOrder = {
-    payment: 'online',
+    payment: 'card',
     email: '',
     phone: '',
     address: '',
@@ -35,7 +38,7 @@ export class AppState extends Model<IAppState> {
   clearOrder() {
     //очищает заказ
     this.order = {
-      payment: 'online',
+      payment: 'card',
       email: '',
       phone: '',
       address: '',
@@ -44,14 +47,14 @@ export class AppState extends Model<IAppState> {
     };
   }
 
-  addToBasket(id: productId) {
+  addToBasket(product: ProductModel) {
     //добавляет объект в корзину
-    this.basket.add(id);
+    this.basket.add(product.id);
   }
 
-  removeFromBasket(id: productId) {
+  removeFromBasket(product: ProductModel) {
     //убирает объект из корзины
-    this.basket.delete(id);
+    this.basket.delete(product.id);
   }
 
   getStatusBasket(): number {
@@ -67,7 +70,6 @@ export class AppState extends Model<IAppState> {
     })
     return selectedProducts;
   }
-
 
   getTotal(): number {
     //вычисляет стоимость всего заказа
@@ -88,23 +90,29 @@ export class AppState extends Model<IAppState> {
   setPreview(item: ProductModel) {
     //заполнить данные превью
       this.preview = item.id;
-      this.emitChanges('preview:changed', item);
+      this.emitChanges('preview:open', item);
   }
 
 
-  setOrderField(field: keyof IOrderForm, value: paymentType & string, step: number) {
-    //заполнить данные заказа
+  setOrderField(field: keyof IOrderForm, value: string, step: number) {
+    //заполнить данные типа оплаты и адреса
       this.order[field] = value;
-
-      if (step === 2 && this.validateOrder(step)) {
+      if (step === 1 && this.validateOrder(step)) {
+        this.events.emit('order:ready', this.order);
+      } 
+      else if (step === 2 && this.validateOrder(step)) {
         this.order.total = this.getTotal();
-        this.order.items = [...this.basket]
+        this.order.items = [...this.basket].filter((item) => {
+          //для мамки выдает ошибку при пост запросе: "товар не продается", поэтому отбираются только товары с ценами
+          const price = this.catalog.find(product => product.id === item).price;
+          return price > 0;
+        });
         this.events.emit('order:ready', this.order);
       }
   }
 
   validateOrder(step: number) {
-    //проверить поля заказа (нужна ли проверка выбора типа оплаты???)
+    //проверить поля заказа 
       const errors: typeof this.formErrors = {};
 
       if (step === 1) {

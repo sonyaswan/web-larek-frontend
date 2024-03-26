@@ -1,7 +1,7 @@
 import {Form} from "./common/Form";
 import {IOrderAdress, IOrderContact} from "../types";
 import {EventEmitter, IEvents} from "./base/events";
-import {ensureAllElements} from "../utils/utils";
+import {ensureAllElements, ensureElement} from "../utils/utils";
 
 
 export class OrderAdress extends Form<IOrderAdress> {
@@ -20,7 +20,9 @@ export class OrderAdress extends Form<IOrderAdress> {
     }
 
     set payment(value: string) {
-        //доработать реализацию - на макете кнопки, а radio !!!
+        this._paymentButtons.forEach(button => {
+            this.toggleClass(button, 'button_alt-active', button.name === value);
+          });
     }
 
     set address(value: string) {

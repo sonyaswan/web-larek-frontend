@@ -14,6 +14,7 @@ export interface ICard {
   image?: string;
   category?: ProductStatus;
   description?: string;
+  index?: number;
 }
 
 //общее
@@ -35,9 +36,9 @@ export class Card<T> extends Component<ICard> {
       super(container);
       this._title = ensureElement<HTMLElement>(`.${blockName}__title`, container);
       this._price = ensureElement<HTMLElement>(`.${blockName}__price`, container);
-      this._image = ensureElement<HTMLImageElement>(`.${blockName}__image`, container);
-      this._category = ensureElement<HTMLElement>(`.${blockName}__category`, container);
-      this._description = ensureElement<HTMLElement>(`.${blockName}__description`, container);
+      this._image = container.querySelector(`.${blockName}__image`);
+      this._category = container.querySelector(`.${blockName}__category`);
+      
   }
 
   set id(value: string) {
@@ -63,11 +64,7 @@ export class Card<T> extends Component<ICard> {
 
   set category(value: string) {
     this.setText(this._category, value);
-    this._category.className = bem(this.blockName, 'category', this._categoryColor[this.category]).name
-  }
-
-  set description(value: string) {
-    this.setText(this._description, value);
+    this._category.className = `${bem(this.blockName, 'category').name} ${bem(this.blockName, 'category', this._categoryColor[value]).name}`
   }
 
 }
@@ -88,10 +85,15 @@ export class PreviewCard extends Card<HTMLElement> {
 
   constructor(protected blockName: string, container: HTMLElement, actions?: ICardActions) {
     super(blockName, container);
+    this._description = ensureElement<HTMLElement>(`.${blockName}__text`, container);
     this._button = container.querySelector(`.${blockName}__button`);
     if (actions?.onClick) {
       this._button.addEventListener('click', actions.onClick);
     }
+  }
+  
+  set description(value: string) {
+    this.setText(this._description, value);
   }
 }
 
@@ -100,10 +102,10 @@ export class BasketCard extends Card<HTMLElement> {
   protected _buttonDelete: HTMLButtonElement;
   protected _index: HTMLElement;
 
-  constructor(protected blockName: string, container: HTMLElement, actions?: ICardActions) {
-    super(blockName, container);
-    this._buttonDelete = container.querySelector(`basket__item-delete`);
-    this._index = container.querySelector(`basket__item-index`);
+  constructor(container: HTMLElement, actions?: ICardActions) {
+    super("card", container);
+    this._buttonDelete = container.querySelector(`.basket__item-delete`);
+    this._index = container.querySelector(`.basket__item-index`);
     if (actions?.onClick) {
       this._buttonDelete.addEventListener('click', actions.onClick);
     }

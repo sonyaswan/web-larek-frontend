@@ -11,10 +11,9 @@ export interface IProductItem {
   price: number | null
 };
 
-export type paymentType = 'online' | 'on delivery';
 
 export interface IOrderAdress {
-  payment: paymentType;
+  payment: string;
   address: string
 };
 
