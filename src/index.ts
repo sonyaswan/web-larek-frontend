@@ -4,7 +4,7 @@ import './scss/styles.scss';
 
 import {WebLarekAPI} from "./components/WebLarekAPI";
 import {API_URL, CDN_URL} from "./utils/constants";
-import {EventEmitter} from "./components/base/events";
+import {EventEmitter} from "./components/base/Events";
 import {AppState, ProductModel, CatalogChangeEvent} from "./components/AppData";
 import {Page} from "./components/Page";
 import {ICard, Card, CatalogCard, PreviewCard, BasketCard} from "./components/Card";

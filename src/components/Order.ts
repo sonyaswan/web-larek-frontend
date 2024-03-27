@@ -1,6 +1,6 @@
 import {Form} from "./common/Form";
 import {IOrderAdress, IOrderContact} from "../types";
-import {EventEmitter, IEvents} from "./base/events";
+import {EventEmitter, IEvents} from "./base/Events";
 import {ensureAllElements, ensureElement} from "../utils/utils";
 
 
