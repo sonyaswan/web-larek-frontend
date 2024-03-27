@@ -71,6 +71,11 @@ export class AppState extends Model<IAppState> {
     return selectedProducts;
   }
 
+  getProductStatus(id: string): boolean {
+    //проверяет, есть ли препарат с указанным id в корзине
+    return this.basket.has(id);
+  }
+
   getTotal(): number {
     //вычисляет стоимость всего заказа
     let totalSum = 0;
@@ -93,6 +98,10 @@ export class AppState extends Model<IAppState> {
       this.emitChanges('preview:open', item);
   }
 
+  clearPreview() {
+    //очистить данные превью
+    this.preview = '';
+  }
 
   setOrderField(field: keyof IOrderForm, value: string, step: number) {
     //заполнить данные типа оплаты и адреса

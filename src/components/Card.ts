@@ -15,6 +15,7 @@ export interface ICard {
   category?: ProductStatus;
   description?: string;
   index?: number;
+  selected?: boolean;
 }
 
 //общее
@@ -95,6 +96,12 @@ export class PreviewCard extends Card<HTMLElement> {
   set description(value: string) {
     this.setText(this._description, value);
   }
+
+  set selected(value: boolean) {
+    this.setDisabled(this._button, value)
+    this.setText(this._button, value ? "Уже в корзине" : "Купить");
+  }
+
 }
 
 //представление в корзине

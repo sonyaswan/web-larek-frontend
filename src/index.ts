@@ -10,10 +10,10 @@ import {Page} from "./components/Page";
 import {ICard, Card, CatalogCard, PreviewCard, BasketCard} from "./components/Card";
 import {cloneTemplate, createElement, ensureElement} from "./utils/utils";
 import {Modal} from "./components/common/Modal";
-import {Basket} from "./components/common/Basket";
+import {Basket} from "./components/Basket";
 import {IOrderForm} from "./types";
 import {OrderAdress, OrderContact} from "./components/Order";
-import {SuccessLarek} from "./components/SuccessLarek";
+import {Success} from "./components/Success";
 
 
 const events = new EventEmitter();
@@ -44,6 +44,7 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const orderAdress = new OrderAdress(cloneTemplate(orderAdressTemplate), events);
 const orderContact= new OrderContact(cloneTemplate(orderContactTemplate), events);
+const success = new Success(cloneTemplate(successTemplate), events);
 
 // Дальше идет бизнес-логика
 // Поймали событие, сделали что нужно
@@ -81,9 +82,12 @@ events.on('preview:open', (item: ProductModel) => {
             image: item.image,
             description: item.description,
             price: item.price,
-            category: item.category
+            category: item.category,
+            selected: appData.getProductStatus(item.id)
         })
     });
+    
+    appData.clearPreview();
 });
 
 // добавление продукта в корзину, обновление статуса корзины
@@ -186,15 +190,11 @@ events.on('contacts:submit', () => {
     //console.log(appData.order)
     api.orderProducts(appData.order)
     .then((result) => {
+
+        success.total = appData.getTotal();
         appData.clearBasket();
         page.counter = 0;
 
-        const success = new SuccessLarek(cloneTemplate(successTemplate), {
-            onClick: () => {
-                modal.close();
-            }
-        });
-    
         modal.render({
             content: success.render({})
         });
@@ -204,6 +204,10 @@ events.on('contacts:submit', () => {
     });
 });
 
+//закрытие окна успешного заказа
+events.on('success:close', () => {
+    modal.close();
+});
 
 
 // Блокируем прокрутку страницы если открыта модалка
@@ -219,6 +223,4 @@ events.on('modal:close', () => {
 // Получаем лоты с сервера
 api.getProductList()
     .then(appData.setCatalog.bind(appData))
-    .catch(err => {
-        console.error(err);
-    });
+    .catch(console.error);

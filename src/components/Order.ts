@@ -6,11 +6,14 @@ import {ensureAllElements, ensureElement} from "../utils/utils";
 
 export class OrderAdress extends Form<IOrderAdress> {
     protected _paymentButtons: HTMLButtonElement[];
-    
+    protected _adressInput: HTMLInputElement;
+
     constructor(container: HTMLFormElement, events: IEvents) {
         super(container, events);
 
         this._paymentButtons = ensureAllElements<HTMLButtonElement>('.button_alt', container);
+        this._adressInput = container.querySelector('input[name="address"]');
+
         this._paymentButtons.forEach(button => {
             button.addEventListener('click', () => {
               this.payment = button.name; 
@@ -26,21 +29,27 @@ export class OrderAdress extends Form<IOrderAdress> {
     }
 
     set address(value: string) {
-        (this.container.elements.namedItem('address') as HTMLInputElement).value = value;
+        this._adressInput.value = value;
     }
 }
 
 
 export class OrderContact extends Form<IOrderContact> {
+    protected _phoneInput: HTMLInputElement;
+    protected _emailInput: HTMLInputElement;
+
     constructor(container: HTMLFormElement, events: IEvents) {
         super(container, events);
+
+        this._phoneInput = container.querySelector('input[name="phone"]');
+        this._emailInput = container.querySelector('input[name="email"]');
     }
 
     set phone(value: string) {
-        (this.container.elements.namedItem('phone') as HTMLInputElement).value = value;
+        this._phoneInput.value = value;
     }
 
     set email(value: string) {
-        (this.container.elements.namedItem('email') as HTMLInputElement).value = value;
+        this._emailInput.value = value;
     }
 }

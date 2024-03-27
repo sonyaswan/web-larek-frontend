@@ -3,6 +3,7 @@
 
 .card {
   @include mixins.flex(column);
+  align-items: flex-start;
   border: 0;
   border-radius: $defaultBorderRadius;
   background-color: $primary;
@@ -12,6 +13,7 @@
   &_full {
     flex-direction: row;
     background-color: transparent;
+    align-items: stretch;
 
     .card__title {
       flex-grow: 0;
@@ -32,6 +34,7 @@
   &__column {
     @include mixins.flex(column);
     align-items: flex-start;
+    margin-bottom: 3.75rem;
   }
 
   &__row {
@@ -50,6 +53,7 @@
     font-weight: 500;
     margin: 0;
     flex-grow: 1;
+    text-align: left;
   }
   &__text {
     text-align: left;
